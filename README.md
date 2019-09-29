@@ -19,6 +19,3 @@ python3 -m nose2 -v --with-coverage
 * To detach, press ctrl+p ctrl+q
 
 
-# Known limitations
-
-*
