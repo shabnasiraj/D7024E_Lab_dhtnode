@@ -1,9 +1,24 @@
 
-Create the container and docker network:
-./setup.sh
+# Build container:
+docker build -t kadnode .
 
-Spawn 50 nodes:
-./spawn_cluser.sh
+# Deploy swarm:
+docker stack deploy --compose-file docker-compose.yml kad
 
-Run one instance interactively:
-docker run -it --net labnet --ip 10.0.1.1 dhtnode ./node.py -i 10.0.1.1
+# Stop swarm:
+docker stack down kad
+
+# View node output:
+docker service logs --raw -f kad_kademlia
+
+# Run unit tests:
+python3 -m nose2 -v --with-coverage
+
+# Attach to the CLI of a running container
+* Run "docker ps" to list container, find an ID and run "docker attach <ID>"
+* To detach, press ctrl+p ctrl+q
+
+
+# Known limitations
+
+*

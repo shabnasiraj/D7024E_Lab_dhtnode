@@ -1,3 +1,5 @@
 FROM python:3.7-slim-buster
 
-COPY node.py node.py
+COPY kademlia kademlia
+
+CMD python3 -m kademlia

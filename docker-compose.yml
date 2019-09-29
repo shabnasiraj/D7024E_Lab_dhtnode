@@ -1,0 +1,41 @@
+version: "3.7"
+services:
+  kademlia_seed_node:
+    build: .
+    image: kadnode:latest
+    command: "python3 -m kademlia"
+    stdin_open: true
+    tty: true
+    deploy:
+      mode: global
+      endpoint_mode: dnsrr
+    networks:
+      kademlia_network:
+        ipv4_address: 10.0.0.1
+        aliases:
+          - seednode
+  kademlia:
+    build: .
+    image: kadnode:latest
+    command: "python3 -m kademlia --join=seednode"
+    stdin_open: true
+    tty: true
+    deploy:
+      mode: replicated
+      endpoint_mode: dnsrr
+      replicas: 50
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 10s
+    networks:
+      - kademlia_network
+
+networks:
+  kademlia_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.0.0/16
+
